@@ -1,0 +1,3 @@
+#! /bin/bash -e
+
+$(dirname $0)/dev hz serve --dev --connect rethinkdb:28015 --bind all /usr/app

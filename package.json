@@ -1,0 +1,59 @@
+{
+  "name": "danywhere",
+  "version": "0.0.1",
+  "description": "",
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "extensions": [
+            ".es6",
+            ".jsx",
+            ".js"
+          ]
+        }
+      ]
+    ]
+  },
+  "scripts": {
+    "start": "npm run build && docker-compose up",
+    "start-local": "hz serve --dev -b=0.0.0.0",
+    "clean-dist": "rm -rf dist && mkdir dist",
+    "compile-js": "NODE_ENV=production browserify src/js/app.js > dist/app.js"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "testFileExtensions": [
+      "es6",
+      "js",
+      "jsx"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6",
+      "jsx"
+    ]
+  },
+  "dependencies": {
+    "rxjs": "^5.0.0-beta.12",
+    "snabbdom": "^0.5.4"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "watchify": "^3.7.0"
+  },
+  "author": "Jichao Ouyang",
+  "license": "ISC",
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "lodash"
+    ]
+  }
+}
