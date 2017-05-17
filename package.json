@@ -1,0 +1,14 @@
+{
+  "name": "gulugulu",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^3.9.0",
+    "react-most": "^1.1.2",
+    "typescript": "^2.3.2"
+  },
+  "devDependencies": {
+    "firebase-tools": "^3.8.0"
+  }
+}
