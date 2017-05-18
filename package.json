@@ -3,12 +3,22 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "watch": "watchify -d scripts/main.ts -p tsify -o public/main.js -dv"
+  },
   "dependencies": {
+    "@reactivex/rxjs": "^5.4.0",
     "firebase": "^3.9.0",
+    "react": "^15.5.4",
     "react-most": "^1.1.2",
     "typescript": "^2.3.2"
   },
   "devDependencies": {
-    "firebase-tools": "^3.8.0"
+    "@types/core-js": "^0.9.41",
+    "@types/node": "^7.0.18",
+    "browserify": "^14.3.0",
+    "firebase-tools": "^3.8.0",
+    "tsify": "^3.0.1",
+    "watchify": "^3.9.0"
   }
 }
