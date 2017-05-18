@@ -71,6 +71,7 @@ let commentAdd = commentsRef.push().set
 
 const shotToDanmaku = document.createElement('input') as HTMLInputElement
 shotToDanmaku.id = 'danmaku-input'
+shotToDanmaku.className = 'danmaku-input'
 document.body.appendChild(shotToDanmaku)
 
 Rx.Observable
@@ -87,3 +88,10 @@ Rx.Observable
     shotToDanmaku.value = ''
     console.log('saved..', x)
   })
+
+
+for (let i = 0; i < 100; i++) {
+  const mockH1 = document.createElement('h1')
+  mockH1.textContent = "我在" + i
+  document.body.appendChild(mockH1)
+}
