@@ -15,9 +15,8 @@ const config = {
   messagingSenderId: "256794078216"
 };
 firebase.initializeApp(config);
-
 let database = firebase.database()
-const refPath = `comments/${encodeURIComponent(window.location.href).replace('.', '%2E')}/`;
+const refPath = `comments/${btoa(window.location.href)}/`;
 var commentsRef = database.ref(refPath);
 
 let commentUpdate$: Rx.Subject<Comment> = new Rx.Subject
