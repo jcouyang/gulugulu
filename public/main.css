@@ -39,8 +39,13 @@
 }
 .danmaku-input {
   position: fixed;
-  bottom: 5px;
+  bottom: 0;
   width: 100%;
+  left: 0;
+  background: linear-gradient(0deg, #eeeeee, #fff, #eeeeee);
+  border: 2px groove #eee;
+  line-height: 20px;
+  box-sizing: border-box;
 }
 .gulu.fly {
   left: -100%;
