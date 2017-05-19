@@ -42,7 +42,9 @@ const Bullet = React.createClass<any, any>({
     }
   },
   componentDidMount() {
-    setTimeout(() => this.setState({ fly: true }))
+    let delay = this.props.comment.datetime % 10000
+    console.log(delay)
+    setTimeout(() => this.setState({ fly: true }), delay)
   },
   render() {
     return h('p', { className: 'gulu' + (this.state.fly ? ' fly' : ''), style: { top: this.props.comment.y } }, this.props.comment.text)
@@ -66,6 +68,7 @@ const Danmaku = connect((intent) => {
     update$: commentUpdate$
       .map(comment => ({
         text: comment.text,
+        datetime: comment.datetime,
         y: genY(comment.datetime)
       }))
       .map(update => state => ({ comments: state.comments.concat([update]) }))
@@ -83,6 +86,7 @@ let commentAdd = commentsRef.push().set
 const shotToDanmaku = document.createElement('input') as HTMLInputElement
 shotToDanmaku.id = 'danmaku-input'
 shotToDanmaku.className = 'danmaku-input'
+shotToDanmaku.placeholder = "您可以在这里输入弹幕吐槽哦~"
 document.body.appendChild(shotToDanmaku)
 
 Rx.Observable

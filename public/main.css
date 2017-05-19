@@ -51,8 +51,7 @@
   position: fixed;
   left: 100%;
   transition: left 15s linear;
-  /* animation-name: danmaku; */
   font-size: 20px;
-  text-shadow: 0 0 2px #790000;
-  color: lightyellow;
+  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;
+  color: white;
 }
