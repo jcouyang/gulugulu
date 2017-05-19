@@ -35,32 +35,24 @@
 }
 
 .container {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 .danmaku-input {
-    position: fixed;
-    bottom: 5px;
-    width: 100%;
+  position: fixed;
+  bottom: 5px;
+  width: 100%;
+}
+.gulu.fly {
+  left: -100%;
 }
 .gulu {
-    display: block;
-    position: fixed;
-    left: 100%;
-    animation-duration: 10s;
-    animation-name: danmaku;
-    font-size: 20px;
-    text-shadow: 0 0 4px red;
-    color: lightyellow;
-}
-
-@keyframes danmaku {
-  from {
-    margin-left: 100%;
-    width: 300%;
-  }
-
-  to {
-    margin-left: -100%;
-    width: 100%;
-  }
+  white-space: nowrap;
+  display: block;
+  position: fixed;
+  left: 100%;
+  transition: left 15s linear;
+  /* animation-name: danmaku; */
+  font-size: 20px;
+  text-shadow: 0 0 2px #790000;
+  color: lightyellow;
 }

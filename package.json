@@ -4,14 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "watch": "watchify -d scripts/main.ts -p tsify -o public/main.js -dv"
+    "watch": "watchify -d scripts/main.ts -t cssify -p tsify -o public/main.js -dv",
+    "build": "env NODE_ENV=production browserify  scripts/main.ts -t cssify -p tsify -o public/main.js"
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.4.0",
     "firebase": "^3.9.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-most": "^1.1.2",
+    "react-most": "^1.1.4",
     "typescript": "^2.3.2"
   },
   "devDependencies": {
@@ -20,8 +21,11 @@
     "@types/react": "^15.0.24",
     "@types/react-dom": "^15.5.0",
     "browserify": "^14.3.0",
+    "cssify": "^1.0.3",
     "firebase-tools": "^3.8.0",
+    "google-closure-compiler-js": "^20170423.0.0",
     "tsify": "^3.0.1",
+    "uglify-js": "^3.0.8",
     "watchify": "^3.9.0"
   }
 }

@@ -5,7 +5,7 @@ import * as React from 'react'
 import { render } from 'react-dom'
 import Most, { connect } from 'react-most'
 import rxengine from 'react-most/lib/engine/rx'
-
+import '../public/main.css'
 const config = {
   apiKey: "AIzaSyDHtULsenSRDeiUPDlAISVi1YJ1gM-wcPA",
   authDomain: "gulugulu-cbf48.firebaseapp.com",
@@ -35,14 +35,26 @@ interface Comment {
   datetime: number
   y: number
 }
-interface DanmakuProps {
-  comments: Comment[]
-}
+
+const Bullet = React.createClass<any, any>({
+  getInitialState() {
+    return {
+      fly: false
+    }
+  },
+  componentDidMount() {
+    setTimeout(() => this.setState({ fly: true }))
+  },
+  render() {
+    return h('p', { className: 'gulu' + (this.state.fly ? ' fly' : ''), style: { top: this.props.comment.y } }, this.props.comment.text)
+  }
+})
+
 const DanmakuView = React.createClass({
   render() {
     return h('div', { className: 'danmaku' },
       this.props.comments.map((comment, key) =>
-        h('p', { className: 'gulu', key, style: { top: comment.y } }, comment.text)))
+        h(Bullet, { key, comment })))
   }
 })
 
@@ -88,10 +100,3 @@ Rx.Observable
     shotToDanmaku.value = ''
     console.log('saved..', x)
   })
-
-
-for (let i = 0; i < 100; i++) {
-  const mockH1 = document.createElement('h1')
-  mockH1.textContent = "我在" + i
-  document.body.appendChild(mockH1)
-}
