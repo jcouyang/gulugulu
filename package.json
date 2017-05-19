@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "watch": "watchify -d scripts/main.ts -t cssify -p tsify -o public/main.js -dv",
-    "build": "env NODE_ENV=production browserify  scripts/main.ts -t cssify -p tsify -o public/main.js"
+    "build": "env NODE_ENV=production browserify  scripts/main.ts -t cssify -p tsify -o public/main.js",
+    "minify": "uglifyjs public/main.js -o public/main.min.js"
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.4.0",
