@@ -1,6 +1,5 @@
 import * as firebase from 'firebase'
-import * as Rx from '@reactivex/rxjs'
-import { Subject } from '@reactivex/rxjs'
+import { Subject, Observable } from '@reactivex/rxjs'
 import * as React from 'react'
 import { render } from 'react-dom'
 import Most, { connect } from 'react-most'
@@ -19,9 +18,10 @@ let database = firebase.database()
 const refPath = `comments/${btoa(window.location.href)}/`;
 var commentsRef = database.ref(refPath);
 
-let commentUpdate$: Rx.Subject<Comment> = new Rx.Subject
+let commentUpdate$: Subject<Comment> = new Subject
 commentsRef.on('child_added', function(snapshot) {
   commentUpdate$.next(snapshot.val())
+
 })
 
 commentUpdate$.subscribe((v) => {
@@ -34,7 +34,7 @@ interface Comment {
   datetime: number
   y: number
 }
-
+const now = new Date().getTime()
 const Bullet = React.createClass<any, any>({
   getInitialState() {
     return {
@@ -42,8 +42,8 @@ const Bullet = React.createClass<any, any>({
     }
   },
   componentDidMount() {
-    let delay = this.props.comment.datetime % 10000
-    console.log(delay)
+    let datetime = this.props.comment.datetime
+    let delay = datetime > now ? 0 : this.props.comment.datetime % 10000
     setTimeout(() => this.setState({ fly: true }), delay)
   },
   render() {
@@ -79,7 +79,6 @@ const danmakuElement = document.createElement('div')
 danmakuElement.id = 'danmaku'
 document.body.appendChild(danmakuElement)
 render(h(Most, { engine: rxengine }, h(Danmaku)), document.querySelector('#danmaku'))
-// commentsRef.push().set({text: 'blahblah'})
 let commentAdd = commentsRef.push().set
 
 
@@ -89,15 +88,15 @@ shotToDanmaku.className = 'danmaku-input'
 shotToDanmaku.placeholder = "您可以在这里输入弹幕吐槽哦~"
 document.body.appendChild(shotToDanmaku)
 
-Rx.Observable
+Observable
   .fromEvent<KeyboardEvent>(shotToDanmaku, 'keyup')
   .filter((e) => e.keyCode === 13)
   .pluck('target', 'value')
-  .flatMap(text => Rx.Observable.fromPromise(
+  .flatMap(text => Observable.fromPromise(
     commentsRef.push().set({
       text,
       datetime: new Date().getTime(),
-      y: window.scrollY,
+      y: window.scrollY
     })))
   .subscribe((x) => {
     shotToDanmaku.value = ''
