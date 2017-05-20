@@ -45961,9 +45961,6 @@ var commentUpdate$ = new rxjs_1.Subject;
 commentsRef.on('child_added', function (snapshot) {
     commentUpdate$.next(snapshot.val());
 });
-commentUpdate$.subscribe(function (v) {
-    console.log('done', v);
-});
 var h = React.createElement;
 var now = new Date().getTime();
 var Bullet = React.createClass({
@@ -46002,7 +45999,6 @@ var Danmaku = react_most_1.connect(function (intent) {
         .flatMap(function (comment) {
         return rxjs_1.Observable.fromEvent(window, 'scroll')
             .filter(function () { return window.scrollY < comment.y + 5 && window.scrollY > comment.y - 5; })
-            .map(function (x) { return console.log(window.scrollY); })
             .debounceTime(1000)
             .map(function () { return comment; });
     });

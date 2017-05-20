@@ -24,10 +24,6 @@ commentsRef.on('child_added', function(snapshot) {
 
 })
 
-commentUpdate$.subscribe((v) => {
-
-  console.log('done', v)
-})
 const h = React.createElement
 interface Comment {
   text: string
@@ -72,7 +68,6 @@ const Danmaku = connect((intent) => {
     .flatMap(comment => {
       return Observable.fromEvent(window, 'scroll')
         .filter(() => window.scrollY < comment.y + 5 && window.scrollY > comment.y - 5)
-        .map(x => console.log(window.scrollY))
         .debounceTime(1000)
         .map(() => comment)
     })
