@@ -45932,14 +45932,14 @@ function symbolObservablePonyfill(root) {
 },{}],624:[function(require,module,exports){
 var inject = require('./../node_modules/cssify');
 var css = "/* always present */\n.expand-transition {\n  transition: all .4s ease;\n  height: 30px;\n  padding: 10px;\n  background-color: #eee;\n  overflow: hidden;\n}\n\n/* .expand-enter defines the starting state for entering */\n/* .expand-leave defines the ending state for leaving */\n.expand-enter, .expand-leave {\n  height: 0;\n  padding: 0 10px;\n  opacity: 0;\n}\n\n.message {\n  height: 50px;\n}\n\n.message img {\n  vertical-align:middle;\n}\n\n.message .text {\n  vertical-align:middle;\n  margin-left:5px;\n  font-family: 'Source Code Pro', \"Raleway\", \"Helvetica Neue\";\n  font-size:20px;\n}\n\n.message .datetime {\n  color:darkgrey;\n}\n\n.container {\n  overflow-x: hidden;\n}\n.danmaku-input {\n  position: fixed;\n  bottom: 0;\n  width: 100%;\n  left: 0;\n  background: linear-gradient(0deg, #eeeeee, #fff, #eeeeee);\n  border: 2px groove #eee;\n  line-height: 20px;\n  box-sizing: border-box;\n}\n.gulu.fly {\n  left: -100%;\n}\n.gulu {\n  white-space: nowrap;\n  display: block;\n  position: fixed;\n  left: 100%;\n  transition: left 15s linear;\n  font-size: 20px;\n  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;\n  color: white;\n}\n";
-inject(css, undefined, '_1bxmp1t');
+inject(css, undefined, '_1uk9cf7');
 module.exports = css;
 
 },{"./../node_modules/cssify":349}],625:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var firebase = require("firebase");
-var Rx = require("@reactivex/rxjs");
+var rxjs_1 = require("@reactivex/rxjs");
 var React = require("react");
 var react_dom_1 = require("react-dom");
 var react_most_1 = require("react-most");
@@ -45957,7 +45957,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var refPath = "comments/" + btoa(window.location.href) + "/";
 var commentsRef = database.ref(refPath);
-var commentUpdate$ = new Rx.Subject;
+var commentUpdate$ = new rxjs_1.Subject;
 commentsRef.on('child_added', function (snapshot) {
     commentUpdate$.next(snapshot.val());
 });
@@ -45965,6 +45965,7 @@ commentUpdate$.subscribe(function (v) {
     console.log('done', v);
 });
 var h = React.createElement;
+var now = new Date().getTime();
 var Bullet = React.createClass({
     getInitialState: function () {
         return {
@@ -45973,8 +45974,8 @@ var Bullet = React.createClass({
     },
     componentDidMount: function () {
         var _this = this;
-        var delay = this.props.comment.datetime % 10000;
-        console.log(delay);
+        var datetime = this.props.comment.datetime;
+        var delay = datetime > now ? 0 : this.props.comment.datetime % 5000;
         setTimeout(function () { return _this.setState({ fly: true }); }, delay);
     },
     render: function () {
@@ -45993,9 +45994,20 @@ DanmakuView.defaultProps = {
 };
 var genY = function (time) { return time % window.innerHeight + 'px'; };
 var Danmaku = react_most_1.connect(function (intent) {
+    var firstScreen = commentUpdate$
+        .filter(function (comment) { return window.scrollY <= comment.y && (window.scrollY + window.innerHeight / 2) >= (comment.y); });
+    var liveUpdate = commentUpdate$
+        .filter(function (comment) { return comment.datetime > now; });
+    var onScroll = commentUpdate$
+        .flatMap(function (comment) {
+        return rxjs_1.Observable.fromEvent(window, 'scroll')
+            .filter(function () { return window.scrollY < comment.y + 5 && window.scrollY > comment.y - 5; })
+            .map(function (x) { return console.log(window.scrollY); })
+            .debounceTime(1000)
+            .map(function () { return comment; });
+    });
     return {
-        update$: commentUpdate$
-            .map(function (comment) { return ({
+        update$: rxjs_1.Observable.merge(firstScreen, liveUpdate, onScroll).map(function (comment) { return ({
             text: comment.text,
             datetime: comment.datetime,
             y: genY(comment.datetime)
@@ -46007,21 +46019,20 @@ var danmakuElement = document.createElement('div');
 danmakuElement.id = 'danmaku';
 document.body.appendChild(danmakuElement);
 react_dom_1.render(h(react_most_1.default, { engine: rx_1.default }, h(Danmaku)), document.querySelector('#danmaku'));
-// commentsRef.push().set({text: 'blahblah'})
 var commentAdd = commentsRef.push().set;
 var shotToDanmaku = document.createElement('input');
 shotToDanmaku.id = 'danmaku-input';
 shotToDanmaku.className = 'danmaku-input';
 shotToDanmaku.placeholder = "您可以在这里输入弹幕吐槽哦~";
 document.body.appendChild(shotToDanmaku);
-Rx.Observable
+rxjs_1.Observable
     .fromEvent(shotToDanmaku, 'keyup')
     .filter(function (e) { return e.keyCode === 13; })
     .pluck('target', 'value')
-    .flatMap(function (text) { return Rx.Observable.fromPromise(commentsRef.push().set({
+    .flatMap(function (text) { return rxjs_1.Observable.fromPromise(commentsRef.push().set({
     text: text,
     datetime: new Date().getTime(),
-    y: window.scrollY,
+    y: window.scrollY
 })); })
     .subscribe(function (x) {
     shotToDanmaku.value = '';

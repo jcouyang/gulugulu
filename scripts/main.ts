@@ -43,7 +43,7 @@ const Bullet = React.createClass<any, any>({
   },
   componentDidMount() {
     let datetime = this.props.comment.datetime
-    let delay = datetime > now ? 0 : this.props.comment.datetime % 10000
+    let delay = datetime > now ? 0 : this.props.comment.datetime % 5000
     setTimeout(() => this.setState({ fly: true }), delay)
   },
   render() {
@@ -64,13 +64,25 @@ DanmakuView.defaultProps = {
 }
 const genY = time => time % window.innerHeight + 'px'
 const Danmaku = connect((intent) => {
+  let firstScreen = commentUpdate$
+    .filter(comment => window.scrollY <= comment.y && (window.scrollY + window.innerHeight / 2) >= (comment.y))
+  let liveUpdate = commentUpdate$
+    .filter(comment => comment.datetime > now)
+  let onScroll = commentUpdate$
+    .flatMap(comment => {
+      return Observable.fromEvent(window, 'scroll')
+        .filter(() => window.scrollY < comment.y + 5 && window.scrollY > comment.y - 5)
+        .map(x => console.log(window.scrollY))
+        .debounceTime(1000)
+        .map(() => comment)
+    })
+
   return {
-    update$: commentUpdate$
-      .map(comment => ({
-        text: comment.text,
-        datetime: comment.datetime,
-        y: genY(comment.datetime)
-      }))
+    update$: Observable.merge(firstScreen, liveUpdate, onScroll).map(comment => ({
+      text: comment.text,
+      datetime: comment.datetime,
+      y: genY(comment.datetime)
+    }))
       .map(update => state => ({ comments: state.comments.concat([update]) }))
   }
 })(DanmakuView)
