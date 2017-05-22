@@ -11,3 +11,6 @@ just put this line of code in any where of your website
 ```
 
 <script src="public/main.min.js"></script>
+
+## Use gulugulu in Chrome
+See Details in Chrome: https://github.com/dashengSun/gulugulu-chrome
