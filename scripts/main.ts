@@ -1,9 +1,16 @@
 import * as firebase from 'firebase'
-import { Subject, Observable } from '@reactivex/rxjs'
+import { Observable } from '@reactivex/rxjs/dist/cjs/Observable'
+import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
+import '@reactivex/rxjs/dist/cjs/add/operator/filter'
+import '@reactivex/rxjs/dist/cjs/add/operator/concatMap'
+import '@reactivex/rxjs/dist/cjs/add/observable/fromEvent'
+import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
+import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
+import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
 import * as React from 'react'
 import { render } from 'react-dom'
-import Most, { connect } from 'react-most'
-import rxengine from 'react-most/lib/engine/rx'
+import X, { x } from 'xreact/lib/x'
+import * as rx from 'xreact/lib/xs/rx'
 import '../public/main.css'
 const config = {
   apiKey: "AIzaSyDHtULsenSRDeiUPDlAISVi1YJ1gM-wcPA",
@@ -59,13 +66,13 @@ DanmakuView.defaultProps = {
   comments: []
 }
 const genY = time => time % window.innerHeight + 'px'
-const Danmaku = connect((intent) => {
+const Danmaku = x((intent) => {
   let firstScreen = commentUpdate$
     .filter(comment => window.scrollY <= comment.y && (window.scrollY + window.innerHeight / 2) >= (comment.y))
   let liveUpdate = commentUpdate$
     .filter(comment => comment.datetime > now)
   let onScroll = commentUpdate$
-    .flatMap(comment => {
+    .concatMap(comment => {
       return Observable.fromEvent(window, 'scroll')
         .filter(() => window.scrollY < comment.y + 5 && window.scrollY > comment.y - 5)
         .debounceTime(1000)
@@ -73,7 +80,7 @@ const Danmaku = connect((intent) => {
     })
 
   return {
-    update$: Observable.merge(firstScreen, liveUpdate, onScroll).map(comment => ({
+    update$: Observable.merge(firstScreen, liveUpdate, onScroll).map((comment: Comment) => ({
       text: comment.text,
       datetime: comment.datetime,
       y: genY(comment.datetime)
@@ -85,7 +92,7 @@ const Danmaku = connect((intent) => {
 const danmakuElement = document.createElement('div')
 danmakuElement.id = 'danmaku'
 document.body.appendChild(danmakuElement)
-render(h(Most, { engine: rxengine }, h(Danmaku)), document.querySelector('#danmaku'))
+render(h(X, { x: rx }, h(Danmaku)), document.querySelector('#danmaku'))
 let commentAdd = commentsRef.push().set
 
 
@@ -99,7 +106,7 @@ Observable
   .fromEvent<KeyboardEvent>(shotToDanmaku, 'keyup')
   .filter((e) => e.keyCode === 13)
   .pluck('target', 'value')
-  .flatMap(text => Observable.fromPromise(
+  .concatMap(text => Observable.fromPromise(
     commentsRef.push().set({
       text,
       datetime: new Date().getTime(),
