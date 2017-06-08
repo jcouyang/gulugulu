@@ -23,15 +23,12 @@
   width: 100%;
   left: 0;
 }
-.gulu.fly {
-  left: -100%;
-}
 .gulu {
   white-space: nowrap;
   display: block;
   position: fixed;
   left: 100%;
-  transition: left 15s linear;
+  transition: left 12s linear;
   font-size: 20px;
   text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;
   color: white;
