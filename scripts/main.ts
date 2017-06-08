@@ -111,7 +111,6 @@ let commentAdd = commentsRef.push().set
 const shotToDanmaku = document.createElement('input') as HTMLInputElement
 shotToDanmaku.id = 'danmaku-input'
 shotToDanmaku.className = 'danmaku-input'
-shotToDanmaku.autofocus = true
 shotToDanmaku.placeholder = "💬您可以在这里输入弹幕吐槽哦~"
 
 const shotDanmakuBox = document.createElement('div') as HTMLElement

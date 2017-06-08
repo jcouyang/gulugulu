@@ -24895,7 +24895,6 @@ var commentAdd = commentsRef.push().set;
 var shotToDanmaku = document.createElement('input');
 shotToDanmaku.id = 'danmaku-input';
 shotToDanmaku.className = 'danmaku-input';
-shotToDanmaku.autofocus = true;
 shotToDanmaku.placeholder = "💬您可以在这里输入弹幕吐槽哦~";
 var shotDanmakuBox = document.createElement('div');
 shotDanmakuBox.className = 'danmaku-box';
