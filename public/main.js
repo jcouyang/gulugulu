@@ -24853,7 +24853,7 @@ exports.merge = merge;
 
 },{"@reactivex/rxjs/dist/cjs/Observable":2,"@reactivex/rxjs/dist/cjs/Subject":6,"@reactivex/rxjs/dist/cjs/add/observable/merge":12,"@reactivex/rxjs/dist/cjs/add/operator/catch":13,"@reactivex/rxjs/dist/cjs/add/operator/map":17}],250:[function(require,module,exports){
 var inject = require('./../node_modules/cssify');
-var css = "/* always present */\n.expand-transition {\n  transition: all .4s ease;\n  height: 30px;\n  padding: 10px;\n  background-color: #eee;\n  overflow: hidden;\n}\n\n/* .expand-enter defines the starting state for entering */\n/* .expand-leave defines the ending state for leaving */\n.expand-enter, .expand-leave {\n  height: 0;\n  padding: 0 10px;\n  opacity: 0;\n}\n\n.message {\n  height: 50px;\n}\n\n.message img {\n  vertical-align:middle;\n}\n\n.message .text {\n  vertical-align:middle;\n  margin-left:5px;\n  font-family: 'Source Code Pro', \"Raleway\", \"Helvetica Neue\";\n  font-size:20px;\n}\n\n.message .datetime {\n  color:darkgrey;\n}\n\n.container {\n  overflow-x: hidden;\n}\n.danmaku-input {\n  position: fixed;\n  bottom: 0;\n  width: 100%;\n  left: 0;\n  background: linear-gradient(0deg, #eeeeee, #fff, #eeeeee);\n  border: 2px groove #eee;\n  line-height: 20px;\n  box-sizing: border-box;\n}\n.gulu.fly {\n  left: -100%;\n}\n.gulu {\n  white-space: nowrap;\n  display: block;\n  position: fixed;\n  left: 100%;\n  transition: left 15s linear;\n  font-size: 20px;\n  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;\n  color: white;\n}\n";
+var css = ".danmaku-input {\n  background-color: lightcyan;\n  border: 0;\n  line-height: 26px;\n  width: 100%;\n  box-sizing: border-box;\n  font-size: 24px;\n}\n.danmaku-color {\n  float: right;\n  position: absolute;\n  right: 5px;\n  line-height: 35px;\n  font-size: 24px;\n  bottom: 0px;\n  vertical-align: middle;\n}\n.danmaku-box {\n  background-color: lightcyan;\n  border-top: 1px dashed lightblue;\n  position: fixed;\n  bottom: 0;\n  width: 100%;\n  left: 0;\n}\n.gulu.fly {\n  left: -100%;\n}\n.gulu {\n  white-space: nowrap;\n  display: block;\n  position: fixed;\n  left: 100%;\n  transition: left 15s linear;\n  font-size: 20px;\n  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;\n  color: white;\n}\n";
 inject(css, undefined, '_1uk9cf7');
 module.exports = css;
 
@@ -24918,16 +24918,18 @@ var DanmakuView = React.createClass({
 DanmakuView.defaultProps = {
     comments: []
 };
+var OFFSET = 3;
+var inArea = function (comment) { return window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET); };
 var genY = function (time) { return time % window.innerHeight + 'px'; };
 var Danmaku = x_1.x(function (intent) {
     var firstScreen = commentUpdate$
-        .filter(function (comment) { return window.scrollY <= comment.y && (window.scrollY + window.innerHeight / 2) >= (comment.y); });
+        .filter(inArea);
     var liveUpdate = commentUpdate$
         .filter(function (comment) { return comment.datetime > now; });
     var onScroll = commentUpdate$
         .concatMap(function (comment) {
         return Observable_1.Observable.fromEvent(window, 'scroll')
-            .filter(function () { return window.scrollY < comment.y + 5 && window.scrollY > comment.y - 5; })
+            .filter(function () { return inArea(comment); })
             .debounceTime(1000)
             .map(function () { return comment; });
     });
@@ -24948,8 +24950,12 @@ var commentAdd = commentsRef.push().set;
 var shotToDanmaku = document.createElement('input');
 shotToDanmaku.id = 'danmaku-input';
 shotToDanmaku.className = 'danmaku-input';
-shotToDanmaku.placeholder = "您可以在这里输入弹幕吐槽哦~";
-document.body.appendChild(shotToDanmaku);
+shotToDanmaku.autofocus = true;
+shotToDanmaku.placeholder = "💬您可以在这里输入弹幕吐槽哦~";
+var shotDanmakuBox = document.createElement('div');
+shotDanmakuBox.className = 'danmaku-box';
+shotDanmakuBox.appendChild(shotToDanmaku);
+document.body.appendChild(shotDanmakuBox);
 Observable_1.Observable
     .fromEvent(shotToDanmaku, 'keyup')
     .filter(function (e) { return e.keyCode === 13; })
