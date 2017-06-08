@@ -2,7 +2,7 @@ import * as firebase from 'firebase'
 import { Observable } from '@reactivex/rxjs/dist/cjs/Observable'
 import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
 import '@reactivex/rxjs/dist/cjs/add/operator/filter'
-import '@reactivex/rxjs/dist/cjs/add/operator/concatMap'
+import '@reactivex/rxjs/dist/cjs/add/operator/mergeMap'
 import '@reactivex/rxjs/dist/cjs/add/observable/fromEvent'
 import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
@@ -50,7 +50,15 @@ const Bullet = React.createClass<any, any>({
     setTimeout(() => this.setState({ fly: true }), delay)
   },
   render() {
-    return h('p', { className: 'gulu' + (this.state.fly ? ' fly' : ''), style: { top: this.props.comment.y } }, this.props.comment.text)
+    let max = 80
+    let left = this.state.fly ? `-${this.props.comment.text.length}em` : '100%'
+    return h('p', {
+      className: 'gulu',
+      style: {
+        top: this.props.comment.y,
+        left
+      }
+    }, this.props.comment.text)
   }
 })
 
@@ -67,16 +75,19 @@ DanmakuView.defaultProps = {
 }
 const OFFSET = 3
 const inArea = comment => window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET)
-const genY = time => time % window.innerHeight + 'px'
+const genY = time => time % (window.innerHeight - 26) + 'px'
 const Danmaku = x((intent) => {
   let firstScreen = commentUpdate$
     .filter(inArea)
   let liveUpdate = commentUpdate$
     .filter(comment => comment.datetime > now)
   let onScroll = commentUpdate$
-    .concatMap(comment => {
+    .mergeMap(comment => {
+      console.log(comment)
       return Observable.fromEvent(window, 'scroll')
-        .filter(() => inArea(comment))
+        .map((x: any) => (console.log(x.pageY, 'before', comment.y), x))
+        .filter(({ pageY }) => pageY <= comment.y + 5 && pageY >= comment.y - 5)
+        .map((x: any) => (console.log(x.pageY), x))
         .debounceTime(1000)
         .map(() => comment)
     })
@@ -113,7 +124,7 @@ Observable
   .fromEvent<KeyboardEvent>(shotToDanmaku, 'keyup')
   .filter((e) => e.keyCode === 13)
   .pluck('target', 'value')
-  .concatMap(text => Observable.fromPromise(
+  .mergeMap(text => Observable.fromPromise(
     commentsRef.push().set({
       text,
       datetime: new Date().getTime(),
