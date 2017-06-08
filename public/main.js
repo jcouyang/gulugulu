@@ -24870,14 +24870,11 @@ var Danmaku = x_1.x(function (intent) {
         .filter(function (comment) { return comment.datetime > now; });
     var onScroll = commentUpdate$
         .mergeMap(function (comment) {
-        console.log(comment);
         return Observable_1.Observable.fromEvent(window, 'scroll')
-            .map(function (x) { return (console.log(x.pageY, 'before', comment.y), x); })
             .filter(function (_a) {
             var pageY = _a.pageY;
             return pageY <= comment.y + 5 && pageY >= comment.y - 5;
         })
-            .map(function (x) { return (console.log(x.pageY), x); })
             .debounceTime(1000)
             .map(function () { return comment; });
     });

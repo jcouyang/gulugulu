@@ -85,11 +85,8 @@ const Danmaku = x((intent) => {
     .filter(comment => comment.datetime > now)
   let onScroll = commentUpdate$
     .mergeMap(comment => {
-      console.log(comment)
       return Observable.fromEvent(window, 'scroll')
-        .map((x: any) => (console.log(x.pageY, 'before', comment.y), x))
         .filter(({ pageY }) => pageY <= comment.y + 5 && pageY >= comment.y - 5)
-        .map((x: any) => (console.log(x.pageY), x))
         .debounceTime(1000)
         .map(() => comment)
     })
