@@ -65,16 +65,18 @@ const DanmakuView = React.createClass({
 DanmakuView.defaultProps = {
   comments: []
 }
+const OFFSET = 3
+const inArea = comment => window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET)
 const genY = time => time % window.innerHeight + 'px'
 const Danmaku = x((intent) => {
   let firstScreen = commentUpdate$
-    .filter(comment => window.scrollY <= comment.y && (window.scrollY + window.innerHeight / 2) >= (comment.y))
+    .filter(inArea)
   let liveUpdate = commentUpdate$
     .filter(comment => comment.datetime > now)
   let onScroll = commentUpdate$
     .concatMap(comment => {
       return Observable.fromEvent(window, 'scroll')
-        .filter(() => window.scrollY < comment.y + 5 && window.scrollY > comment.y - 5)
+        .filter(() => inArea(comment))
         .debounceTime(1000)
         .map(() => comment)
     })
@@ -99,8 +101,13 @@ let commentAdd = commentsRef.push().set
 const shotToDanmaku = document.createElement('input') as HTMLInputElement
 shotToDanmaku.id = 'danmaku-input'
 shotToDanmaku.className = 'danmaku-input'
-shotToDanmaku.placeholder = "您可以在这里输入弹幕吐槽哦~"
-document.body.appendChild(shotToDanmaku)
+shotToDanmaku.autofocus = true
+shotToDanmaku.placeholder = "💬您可以在这里输入弹幕吐槽哦~"
+
+const shotDanmakuBox = document.createElement('div') as HTMLElement
+shotDanmakuBox.className = 'danmaku-box'
+shotDanmakuBox.appendChild(shotToDanmaku)
+document.body.appendChild(shotDanmakuBox)
 
 Observable
   .fromEvent<KeyboardEvent>(shotToDanmaku, 'keyup')

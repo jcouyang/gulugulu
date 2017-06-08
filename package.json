@@ -25,7 +25,6 @@
     "cssify": "^1.0.3",
     "envify": "^4.0.0",
     "firebase-tools": "^3.8.0",
-    "google-closure-compiler-js": "^20170423.0.0",
     "tsify": "^3.0.1",
     "uglify-js": "^3.0.8",
     "watchify": "^3.9.0"

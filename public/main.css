@@ -1,51 +1,27 @@
-/* always present */
-.expand-transition {
-  transition: all .4s ease;
-  height: 30px;
-  padding: 10px;
-  background-color: #eee;
-  overflow: hidden;
-}
-
-/* .expand-enter defines the starting state for entering */
-/* .expand-leave defines the ending state for leaving */
-.expand-enter, .expand-leave {
-  height: 0;
-  padding: 0 10px;
-  opacity: 0;
-}
-
-.message {
-  height: 50px;
-}
-
-.message img {
-  vertical-align:middle;
-}
-
-.message .text {
-  vertical-align:middle;
-  margin-left:5px;
-  font-family: 'Source Code Pro', "Raleway", "Helvetica Neue";
-  font-size:20px;
-}
-
-.message .datetime {
-  color:darkgrey;
-}
-
-.container {
-  overflow-x: hidden;
-}
 .danmaku-input {
+  background-color: lightcyan;
+  border: 0;
+  line-height: 26px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 24px;
+}
+.danmaku-color {
+  float: right;
+  position: absolute;
+  right: 5px;
+  line-height: 35px;
+  font-size: 24px;
+  bottom: 0px;
+  vertical-align: middle;
+}
+.danmaku-box {
+  background-color: lightcyan;
+  border-top: 1px dashed lightblue;
   position: fixed;
   bottom: 0;
   width: 100%;
   left: 0;
-  background: linear-gradient(0deg, #eeeeee, #fff, #eeeeee);
-  border: 2px groove #eee;
-  line-height: 20px;
-  box-sizing: border-box;
 }
 .gulu.fly {
   left: -100%;
