@@ -24862,7 +24862,7 @@ DanmakuView.defaultProps = {
 };
 var OFFSET = 3;
 var inArea = function (comment) { return window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET); };
-var genY = function (time) { return time % (window.innerHeight - 26) + 'px'; };
+var genY = function (time) { return time % (window.innerHeight - 52) + 'px'; };
 var Danmaku = x_1.x(function (intent) {
     var firstScreen = commentUpdate$
         .filter(inArea);

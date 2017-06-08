@@ -28,7 +28,6 @@ var commentsRef = database.ref(refPath);
 let commentUpdate$: Subject<Comment> = new Subject
 commentsRef.on('child_added', function(snapshot) {
   commentUpdate$.next(snapshot.val())
-
 })
 
 const h = React.createElement
@@ -78,7 +77,7 @@ DanmakuView.defaultProps = {
 }
 const OFFSET = 3
 const inArea = comment => window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET)
-const genY = time => time % (window.innerHeight - 26) + 'px'
+const genY = time => time % (window.innerHeight - 52) + 'px'
 const Danmaku = x((intent) => {
   let firstScreen = commentUpdate$
     .filter(inArea)
