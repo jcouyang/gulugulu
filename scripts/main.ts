@@ -111,7 +111,14 @@ let commentAdd = commentsRef.push().set
 const shotToDanmaku = document.createElement('input') as HTMLInputElement
 shotToDanmaku.id = 'danmaku-input'
 shotToDanmaku.className = 'danmaku-input'
-shotToDanmaku.placeholder = "💬您可以在这里输入弹幕吐槽哦~"
+const n = navigator as any
+const language = n.languages
+  ? n.languages[0]
+  : (navigator.language || n.userLanguage)
+if (language == 'zh-CN')
+  shotToDanmaku.placeholder = "💬 您可以在这里输入弹幕吐槽哦~"
+else
+  shotToDanmaku.placeholder = "💬 Type here to 突っ込み(Tsukkomi) on 弾幕(Danmaku)~"
 
 const shotDanmakuBox = document.createElement('div') as HTMLElement
 shotDanmakuBox.className = 'danmaku-box'
