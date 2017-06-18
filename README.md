@@ -5,11 +5,6 @@
 <rt>if you like Tsukkomi on Bilibili, then good news, now you can Tsukkomi on any website, with gulugulu script</rt>
 </ruby>
 
-<ruby>
-只要在你的网站中放入这段脚本
-<rt>just put this line of code in any where of your website</rt>
-</ruby>
-
 ```
 <script src="https://oyanglul.us/gulugulu/public/main.min.js"></script>
 ```
