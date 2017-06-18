@@ -35,9 +35,17 @@
 ## Privacy
 
 <ruby>
-所有数据存储在google firebase database，记录的数据只包含，网址，时间，Y轴，文字（将来可能会加入弹幕颜色）。不涉及IP，登陆（当然我们也不需要登陆）等任何隐私信息，也不不以任何形式审核或分析数据，但请遵守法律以及<a href="http://www.bilibili.com/blackboard/help.html#d5">弹幕礼仪<a>。
+所有数据存储在google firebase database，记录的数据只包含，网址，时间，Y轴，文字（将来可能会加入弹幕颜色）。<br>
+<rt>All data store at google firebase database, which only contains URI, time, y axis and danmaku text(and color maybe in future). <rt>
+</ruby>
 
-<rt>All data store at google firebase database, which only contains URI, time, y axis and danmaku text(and color maybe in future). we'll not collect any IP or login etc private information, and never analytic data in any form.</rt>
+<ruby>
+不涉及IP，登陆（当然我们也不需要登陆）等任何隐私信息，也不不以任何形式审核或分析数据。
+<rt>we'll not collect any IP or login etc private information, and never analytic data in any form.</rt>
+
+<ruby>
+但请遵守当地法律以及<a href="http://www.bilibili.com/blackboard/help.html#d5">弹幕礼仪<a>。
+<rt>please respecte your law in local and Danmaku manner</rt>
 </ruby>
 
 <script src="public/main.min.js"></script>
