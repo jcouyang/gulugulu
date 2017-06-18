@@ -49,7 +49,7 @@
 </ruby>
 
 <ruby>
-但请遵守当地法律以及<a href="http://www.bilibili.com/blackboard/help.html#d5">弹幕礼仪<a>。
+但请遵守当地法律以及<a href="http://www.bilibili.com/blackboard/help.html#d5">弹幕礼仪</a>。
 <rt>please respecte your local law and Danmaku manner</rt>
 </ruby>
 
