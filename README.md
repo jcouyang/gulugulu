@@ -35,7 +35,7 @@
 ## Privacy
 
 <ruby>
-所有数据存储在google firebase database，记录的数据只包含，网址，时间，Y轴，文字（将来可能会加入弹幕颜色）。<br>
+所有数据存储在google firebase database，记录的数据只包含，网址，时间，Y轴，文字（将来可能会加入弹幕颜色）。
 <rt>All data store at google firebase database, which only contains URI, time, y axis and danmaku text(and color maybe in future). <rt>
 </ruby>
 
@@ -48,5 +48,7 @@
 但请遵守当地法律以及<a href="http://www.bilibili.com/blackboard/help.html#d5">弹幕礼仪<a>。
 <rt>please respecte your law in local and Danmaku manner</rt>
 </ruby>
+
+<br/>
 
 <script src="public/main.min.js"></script>
