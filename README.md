@@ -32,6 +32,10 @@
 </p>
 
 
+## 来试试你的吐槽能量
+- https://xreact.oyanglul.us/
+- https://blog.oyanglul.us/index.html
+
 ## Privacy
 
 <ruby>
