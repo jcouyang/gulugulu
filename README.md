@@ -42,6 +42,7 @@
 <ruby>
 不涉及IP，登陆（当然我们也不需要登陆）等任何隐私信息，也不不以任何形式审核或分析数据。
 <rt>we'll not collect any IP or login etc private information, and never analytic data in any form.</rt>
+</ruby>
 
 <ruby>
 但请遵守当地法律以及<a href="http://www.bilibili.com/blackboard/help.html#d5">弹幕礼仪<a>。
