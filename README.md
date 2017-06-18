@@ -2,8 +2,8 @@
 
 ## What
 <ruby>
-不只是在B站可以吐槽，使用咕噜咕噜，连看网页也可以吐槽，只需要加入以下脚本到你的网站
-<rt>if you like Tsukkomi on Bilibili, then good news, now you can Tsukkomi on any website, with gulugulu script</rt>
+不只是在<a href="http://bilibili.com/">B站</a>可以吐槽，使用咕噜咕噜，连看网页也可以吐槽，只需要加入以下脚本到你的网站
+<rt>if you like Tsukkomi on <a href="https://en.wikipedia.org/wiki/Niconico">niconico</a>, then good news, now you can Tsukkomi on any website, with gulugulu script</rt>
 </ruby>
 
 ## How
