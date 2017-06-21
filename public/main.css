@@ -22,6 +22,7 @@
   bottom: 0;
   width: 100%;
   left: 0;
+  z-index: 9999;
 }
 .gulu {
   white-space: nowrap;
@@ -32,4 +33,5 @@
   font-size: 20px;
   text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;
   color: white;
+  z-index: 9999;
 }
