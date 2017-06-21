@@ -2881,6 +2881,9 @@ var db_1 = require("./db");
 require("../public/main.css");
 var url = document.querySelector('#direct-message-to');
 var y = document.querySelector('#direct-message-y');
+var updateinput = function () { url.value = window.location.hash.slice(1); };
+updateinput();
+window.onhashchange = updateinput;
 function commentsRef() {
     var refPath = "comments/" + btoa(url.value) + "/";
     return {

@@ -4,10 +4,9 @@ import '../public/main.css'
 let url = document.querySelector('#direct-message-to') as HTMLInputElement
 let y = document.querySelector('#direct-message-y') as HTMLInputElement
 
-url.value = window.location.hash
-window.addEventListener("hashchange", function() {
-  url.value = window.location.hash
-}, false);
+const updateinput = () => { url.value = window.location.hash.slice(1) }
+updateinput()
+window.onhashchange = updateinput
 
 function commentsRef() {
   let refPath = `comments/${btoa(url.value)}/`;
