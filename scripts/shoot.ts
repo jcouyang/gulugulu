@@ -7,6 +7,8 @@ import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
 import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
 
 export function renderInput(ref) {
+  let commentsRef = ref().db
+  let y = ref().y
 
   const shotToDanmaku = document.createElement('input') as HTMLInputElement
   shotToDanmaku.id = 'danmaku-input'

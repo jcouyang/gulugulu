@@ -1,4 +1,4 @@
-import * as firebase from 'firebase'
+import database from './db'
 import { Observable } from '@reactivex/rxjs/dist/cjs/Observable'
 import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
 import '@reactivex/rxjs/dist/cjs/add/operator/filter'
@@ -12,16 +12,7 @@ import { render } from 'react-dom'
 import X, { x } from 'xreact/lib/x'
 import * as rx from 'xreact/lib/xs/rx'
 import '../public/main.css'
-const config = {
-  apiKey: "AIzaSyDHtULsenSRDeiUPDlAISVi1YJ1gM-wcPA",
-  authDomain: "gulugulu-cbf48.firebaseapp.com",
-  databaseURL: "https://gulugulu-cbf48.firebaseio.com",
-  projectId: "gulugulu-cbf48",
-  storageBucket: "gulugulu-cbf48.appspot.com",
-  messagingSenderId: "256794078216"
-};
-firebase.initializeApp(config);
-let database = firebase.database()
+
 const refPath = `comments/${btoa(window.location.href)}/`;
 var commentsRef = database.ref(refPath);
 
@@ -100,42 +91,3 @@ const Danmaku = x((intent) => {
       .map(update => state => ({ comments: state.comments.concat([update]) }))
   }
 })(DanmakuView)
-
-const danmakuElement = document.createElement('div')
-danmakuElement.id = 'danmaku'
-document.body.appendChild(danmakuElement)
-render(h(X, { x: rx }, h(Danmaku)), document.querySelector('#danmaku'))
-let commentAdd = commentsRef.push().set
-
-
-const shotToDanmaku = document.createElement('input') as HTMLInputElement
-shotToDanmaku.id = 'danmaku-input'
-shotToDanmaku.className = 'danmaku-input'
-const n = navigator as any
-const language = n.languages
-  ? n.languages[0]
-  : (navigator.language || n.userLanguage)
-if (language == 'zh-CN')
-  shotToDanmaku.placeholder = "💬 您可以在这里输入弹幕吐槽哦~"
-else
-  shotToDanmaku.placeholder = "💬 Type here to 突っ込み(Tsukkomi) on 弾幕(Danmaku)~"
-
-const shotDanmakuBox = document.createElement('div') as HTMLElement
-shotDanmakuBox.className = 'danmaku-box'
-shotDanmakuBox.appendChild(shotToDanmaku)
-document.body.appendChild(shotDanmakuBox)
-
-Observable
-  .fromEvent<KeyboardEvent>(shotToDanmaku, 'keyup')
-  .filter((e) => e.keyCode === 13)
-  .pluck('target', 'value')
-  .mergeMap(text => Observable.fromPromise(
-    commentsRef.push().set({
-      text,
-      datetime: new Date().getTime(),
-      y: window.scrollY
-    })))
-  .subscribe((x) => {
-    shotToDanmaku.value = ''
-    console.log('saved..', x)
-  })

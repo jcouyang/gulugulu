@@ -6,6 +6,7 @@
   "scripts": {
     "watch": "watchify -d scripts/main.ts -t cssify -p tsify -o public/main.js -dv",
     "build": "env NODE_ENV=production browserify  scripts/main.ts -t cssify -t envify -p tsify -o public/main.js",
+    "dm": "env NODE_ENV=production browserify  scripts/dm.ts -t cssify -t envify -p tsify -o public/dm.js",
     "minify": "uglifyjs public/main.js > public/main.min.js"
   },
   "dependencies": {
