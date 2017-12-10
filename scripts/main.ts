@@ -12,6 +12,7 @@ import { render } from 'react-dom'
 import X, { x } from 'xreact/lib/x'
 import * as rx from 'xreact/lib/xs/rx'
 import { renderInput } from './shoot'
+import { displayComments } from './comments'
 import '../public/main.css'
 
 const refPath = `comments/${btoa(window.location.href)}/`;
@@ -27,6 +28,7 @@ interface Comment {
   text: string
   datetime: number
   y: number
+  pos: number
 }
 const now = new Date().getTime()
 const Bullet = React.createClass<any, any>({
@@ -70,6 +72,7 @@ DanmakuView.defaultProps = {
 const OFFSET = 3
 const inArea = comment => window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET)
 const genY = time => time % (window.innerHeight - 52) + 'px'
+
 const Danmaku = x((intent) => {
   let firstScreen = commentUpdate$
     .filter(inArea)
@@ -78,7 +81,9 @@ const Danmaku = x((intent) => {
   let onScroll = commentUpdate$
     .mergeMap(comment => {
       return Observable.fromEvent(window, 'scroll')
-        .filter(({ pageY }) => pageY <= comment.y + 5 && pageY >= comment.y - 5)
+        .filter(({ pageY }) => {
+          return pageY <= comment.y + 5 && pageY >= comment.y - 5
+        })
         .debounceTime(1000)
         .map(() => comment)
     })
@@ -98,4 +103,9 @@ danmakuElement.id = 'danmaku'
 document.body.appendChild(danmakuElement)
 render(h(X, { x: rx }, h(Danmaku)), document.querySelector('#danmaku'))
 
-renderInput(() => commentsRef, () => window.scrollY)
+function reletivePos() {
+  return window.scrollY / window.document.body.offsetHeight * 100;
+}
+
+renderInput(() => commentsRef, () => window.scrollY, reletivePos)
+displayComments(commentUpdate$, document.querySelector('#danmaku-comments'))

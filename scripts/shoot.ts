@@ -6,7 +6,7 @@ import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
 import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
 
-export function renderInput(getdb, gety) {
+export function renderInput(getdb, gety, getpos = () => 0) {
   const shotToDanmaku = document.createElement('input') as HTMLInputElement
   shotToDanmaku.id = 'danmaku-input'
   shotToDanmaku.className = 'danmaku-input'
@@ -32,7 +32,8 @@ export function renderInput(getdb, gety) {
       getdb().push().set({
         text,
         datetime: new Date().getTime(),
-        y: gety()
+        y: gety(),
+        pos: getpos(),
       })))
     .subscribe((x) => {
       shotToDanmaku.value = ''

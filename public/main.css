@@ -35,3 +35,80 @@
   color: white;
   z-index: 9999;
 }
+
+#danmaku-comments {
+  padding: 1.5rem;
+  border-width: .2rem;
+  margin: 1rem;
+  border: solid #f7f7f9;
+  max-height: 30em;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#danmaku-comments .badge{
+  color: #111;
+  background-color: #f8f9fa;
+  display: inline-block;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;
+}
+
+#danmaku-comments .danmaku-comment {
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+}
+
+#danmaku-comments .danmaku-comment:nth-child(1) {
+  color: #464a4e;
+  background-color: #e7e8ea;
+  border-color: #dddfe2;
+}
+
+#danmaku-comments .danmaku-comment:nth-child(2n) {
+  color: #004085;
+  background-color: #cce5ff;
+  border-color: #b8daff;
+}
+
+#danmaku-comments .danmaku-comment:nth-child(3n) {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+#danmaku-comments .danmaku-comment:nth-child(5n) {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+#danmaku-comments .danmaku-comment:nth-child(7n) {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+#danmaku-comments .danmaku-topos {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: .75em 1.25em;
+  background: 0 0;
+  border: 0;
+  float: right;
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+}
