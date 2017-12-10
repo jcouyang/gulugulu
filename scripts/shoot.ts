@@ -6,10 +6,7 @@ import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
 import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
 
-export function renderInput(ref) {
-  let commentsRef = ref().db
-  let y = ref().y
-
+export function renderInput(getdb, gety) {
   const shotToDanmaku = document.createElement('input') as HTMLInputElement
   shotToDanmaku.id = 'danmaku-input'
   shotToDanmaku.className = 'danmaku-input'
@@ -32,14 +29,13 @@ export function renderInput(ref) {
     .filter((e) => e.keyCode === 13)
     .pluck('target', 'value')
     .mergeMap(text => Observable.fromPromise(
-      ref().db.push().set({
+      getdb().push().set({
         text,
         datetime: new Date().getTime(),
-        y: ref().y
+        y: gety()
       })))
     .subscribe((x) => {
       shotToDanmaku.value = ''
       console.log('saved..', x)
     })
-
 }

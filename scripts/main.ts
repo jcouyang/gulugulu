@@ -11,6 +11,7 @@ import * as React from 'react'
 import { render } from 'react-dom'
 import X, { x } from 'xreact/lib/x'
 import * as rx from 'xreact/lib/xs/rx'
+import { renderInput } from './shoot'
 import '../public/main.css'
 
 const refPath = `comments/${btoa(window.location.href)}/`;
@@ -91,3 +92,10 @@ const Danmaku = x((intent) => {
       .map(update => state => ({ comments: state.comments.concat([update]) }))
   }
 })(DanmakuView)
+
+const danmakuElement = document.createElement('div')
+danmakuElement.id = 'danmaku'
+document.body.appendChild(danmakuElement)
+render(h(X, { x: rx }, h(Danmaku)), document.querySelector('#danmaku'))
+
+renderInput(() => commentsRef, () => window.scrollY)
