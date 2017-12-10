@@ -1,15 +1,11 @@
 import { Observable } from '@reactivex/rxjs/dist/cjs/Observable'
 import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
-import '@reactivex/rxjs/dist/cjs/add/operator/filter'
-import '@reactivex/rxjs/dist/cjs/add/operator/mergeMap'
-import '@reactivex/rxjs/dist/cjs/add/observable/fromEvent'
-import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
-import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
-import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
+import './operators'
 import * as React from 'react'
 import { render } from 'react-dom'
 import X, { x } from 'xreact/lib/x'
 import * as rx from 'xreact/lib/xs/rx'
+import { genY } from './utils'
 const h = React.createElement
 
 function formatDate(unixTime) {
@@ -34,15 +30,16 @@ const Comment: React.SFC<any> = props => (
     }, "⤴")
   )
 )
-const CommentsView = React.createClass({
-  render() {
-    return h('div', { className: 'danmaku-comment-view' },
-      this.props.comments.map((comment, key) =>
-        h(Comment, { key, comment })))
-  }
-})
+const CommentsView: React.SFC<any> = props => (
+  h('div', { className: 'danmaku-comment-view' },
+    h('h3', { title: "danmaku list" }, "弹幕列表"),
+    props.comments.map((comment, key) =>
+      h(Comment, { key, comment })))
+)
+
 CommentsView.defaultProps = { comments: [] }
-const genY = time => time % (window.innerHeight - 52) + 'px'
+
+
 const Comments = commentUpdate$ => x(intent$ => {
   return {
     update$: commentUpdate$.map((comment) => ({

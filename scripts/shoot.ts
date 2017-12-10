@@ -6,7 +6,7 @@ import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
 import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
 
-export function renderInput(getdb, gety, getpos = () => 0) {
+export function displayInput(getdb, gety, getpos = () => 0) {
   const shotToDanmaku = document.createElement('input') as HTMLInputElement
   shotToDanmaku.id = 'danmaku-input'
   shotToDanmaku.className = 'danmaku-input'
@@ -28,6 +28,7 @@ export function renderInput(getdb, gety, getpos = () => 0) {
     .fromEvent<KeyboardEvent>(shotToDanmaku, 'keyup')
     .filter((e) => e.keyCode === 13)
     .pluck('target', 'value')
+    .filter((text: string) => text.trim().length != 0)
     .mergeMap(text => Observable.fromPromise(
       getdb().push().set({
         text,

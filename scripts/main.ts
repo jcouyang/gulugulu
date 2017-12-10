@@ -1,115 +1,64 @@
 import database from './db'
 import { Observable } from '@reactivex/rxjs/dist/cjs/Observable'
 import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
-import '@reactivex/rxjs/dist/cjs/add/operator/filter'
-import '@reactivex/rxjs/dist/cjs/add/operator/mergeMap'
-import '@reactivex/rxjs/dist/cjs/add/observable/fromEvent'
-import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
-import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
-import '@reactivex/rxjs/dist/cjs/add/operator/throttleTime'
-import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
+import './operators'
 import * as React from 'react'
 import { render } from 'react-dom'
 import X, { x } from 'xreact/lib/x'
 import * as rx from 'xreact/lib/xs/rx'
-import { renderInput } from './shoot'
+import { displayInput } from './shoot'
 import { displayComments } from './comments'
+import { DanmakuView } from './view/danmaku'
 import '../public/main.css'
-
+const h = React.createElement
 const refPath = `comments/${btoa(window.location.href)}/`;
-var commentsRef = database.ref(refPath);
-
+const commentsRef = database.ref(refPath);
+const whenMounted = new Date().getTime()
+import { firstPage, genY, pos, nearPos, reletivePos } from './utils'
 let commentUpdate$: Subject<Comment> = new Subject
 commentsRef.on('child_added', function(snapshot) {
   commentUpdate$.next(snapshot.val())
 })
 
-const h = React.createElement
 interface Comment {
   text: string
   datetime: number
   y: number
   pos: number
 }
-const now = new Date().getTime()
-const Bullet = React.createClass<any, any>({
-  getInitialState() {
-    return {
-      fly: false,
-      render: true,
-    }
-  },
-  componentDidMount() {
-    let datetime = this.props.comment.datetime
-    let delay = datetime > now ? 0 : this.props.comment.datetime % 5000
-    setTimeout(() => this.setState({ fly: true }), delay)
-    setTimeout(() => this.setState({ render: false }), 12000 + delay)
-  },
-  render() {
-    let max = 80
-    let left = this.state.fly ? `-${this.props.comment.text.length}em` : '100%'
-    if (!this.state.render) return null
-    return h('p', {
-      className: 'gulu',
-      style: {
-        top: this.props.comment.y,
-        left
-      }
-    }, this.props.comment.text)
-  }
-})
 
-const DanmakuView = React.createClass({
-  render() {
-    return h('div', { className: 'danmaku' },
-      this.props.comments.map((comment, key) =>
-        h(Bullet, { key, comment })))
-  }
-})
 
-DanmakuView.defaultProps = {
-  comments: []
+function displayDanmakuBullets() {
+  const danmakuElement = document.createElement('div')
+  danmakuElement.id = 'danmaku'
+  document.body.appendChild(danmakuElement)
+  render(h(X, { x: rx }, h(Danmaku)), document.querySelector('#danmaku'))
 }
-const OFFSET = 3
-const inArea = comment => window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET)
-const genY = time => time % (window.innerHeight - 52) + 'px'
-function pos(comment) {
-  return comment.pos || comment.y * 100 / window.document.body.offsetHeight
-}
+
 const Danmaku = x((intent) => {
-  let firstScreen = commentUpdate$
-    .filter(inArea)
+  let firstScreen = commentUpdate$.filter(firstPage)
   let liveUpdate = commentUpdate$
-    .filter(comment => comment.datetime > now)
+    .filter(comment => comment.datetime > whenMounted)
   let onScroll = commentUpdate$
     .mergeMap(comment => {
       return Observable.fromEvent(window, 'scroll')
-        .filter(({ pageY }) => {
-          let currentPos = pageY / window.document.body.offsetHeight * 100
-          return currentPos <= pos(comment) + 1 && currentPos >= pos(comment) - 1
-        })
+        .filter(({ pageY }) => nearPos(pageY, comment))
         .throttleTime(5000)
         .map(() => comment)
     })
 
   return {
-    update$: Observable.merge(firstScreen, liveUpdate, onScroll).map((comment: Comment) => ({
-      text: comment.text,
-      datetime: comment.datetime,
-      y: genY(comment.datetime)
-    }))
+    update$: Observable
+      .merge(firstScreen, liveUpdate, onScroll)
+      .map((comment: Comment) => ({
+        text: comment.text,
+        datetime: comment.datetime,
+        y: genY(comment.datetime)
+      }))
       .map(update => state => ({ comments: state.comments.concat([update]) }))
   }
 })(DanmakuView)
 
-const danmakuElement = document.createElement('div')
-danmakuElement.id = 'danmaku'
-document.body.appendChild(danmakuElement)
-render(h(X, { x: rx }, h(Danmaku)), document.querySelector('#danmaku'))
-
-function reletivePos() {
-  return window.scrollY / window.document.body.offsetHeight * 100;
-}
-
-renderInput(() => commentsRef, () => window.scrollY, reletivePos)
+displayDanmakuBullets()
+displayInput(() => commentsRef, () => window.scrollY, reletivePos)
 displayComments(commentUpdate$, document.querySelector('#danmaku-comments'))
