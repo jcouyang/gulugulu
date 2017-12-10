@@ -6,6 +6,7 @@ import '@reactivex/rxjs/dist/cjs/add/operator/mergeMap'
 import '@reactivex/rxjs/dist/cjs/add/observable/fromEvent'
 import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
+import '@reactivex/rxjs/dist/cjs/add/operator/throttleTime'
 import '@reactivex/rxjs/dist/cjs/add/operator/pluck'
 import * as React from 'react'
 import { render } from 'react-dom'
@@ -72,7 +73,9 @@ DanmakuView.defaultProps = {
 const OFFSET = 3
 const inArea = comment => window.scrollY <= (comment.y + OFFSET) && window.scrollY >= (comment.y - OFFSET)
 const genY = time => time % (window.innerHeight - 52) + 'px'
-
+function pos(comment) {
+  return comment.pos || comment.y * 100 / window.document.body.offsetHeight
+}
 const Danmaku = x((intent) => {
   let firstScreen = commentUpdate$
     .filter(inArea)
@@ -82,9 +85,10 @@ const Danmaku = x((intent) => {
     .mergeMap(comment => {
       return Observable.fromEvent(window, 'scroll')
         .filter(({ pageY }) => {
-          return pageY <= comment.y + 5 && pageY >= comment.y - 5
+          let currentPos = pageY / window.document.body.offsetHeight * 100
+          return currentPos <= pos(comment) + 1 && currentPos >= pos(comment) - 1
         })
-        .debounceTime(1000)
+        .throttleTime(5000)
         .map(() => comment)
     })
 
