@@ -1,6 +1,7 @@
 import { Observable } from '@reactivex/rxjs/dist/cjs/Observable'
 import '@reactivex/rxjs/dist/cjs/add/operator/filter'
 import '@reactivex/rxjs/dist/cjs/add/operator/mergeMap'
+import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/observable/fromEvent'
 import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 import '@reactivex/rxjs/dist/cjs/add/operator/debounceTime'
