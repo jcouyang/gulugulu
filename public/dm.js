@@ -2881,7 +2881,7 @@ var db_1 = require("./db");
 require("../public/main.css");
 var url = document.querySelector('#direct-message-to');
 var y = document.querySelector('#direct-message-y');
-shoot_1.displayInput(function () { return db_1.default.ref("comments/" + btoa(window.location.hash.slice(1)) + "/"); }, function () { return y; });
+shoot_1.displayInput(function () { return db_1.default.ref("comments/" + btoa(window.location.hash.slice(1)) + "/"); }, function () { return window.scrollY; }, function () { return parseInt(y.value); });
 
 },{"../public/main.css":48,"./db":49,"./shoot":51}],51:[function(require,module,exports){
 "use strict";
