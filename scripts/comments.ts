@@ -42,12 +42,7 @@ CommentsView.defaultProps = { comments: [] }
 
 const Comments = commentUpdate$ => x(intent$ => {
   return {
-    update$: commentUpdate$.map((comment) => ({
-      text: comment.text,
-      datetime: comment.datetime,
-      y: genY(comment.datetime),
-      pos: comment.pos || comment.y * 100 / window.document.body.offsetHeight
-    })).map(update => state => ({ comments: state.comments.concat([update]) }))
+    update$: commentUpdate$.map(update => state => ({ comments: state.comments.concat([update]) }))
   }
 })(CommentsView)
 

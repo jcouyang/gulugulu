@@ -35,6 +35,13 @@ function displayDanmakuBullets() {
   render(h(X, { x: rx }, h(Danmaku)), document.querySelector('#danmaku'))
 }
 
+const posit = (comment: Comment) => ({
+  text: comment.text,
+  datetime: comment.datetime,
+  y: genY(comment.datetime),
+  pos: comment.pos || comment.y * 100 / window.document.body.offsetHeight
+})
+
 const Danmaku = x((intent) => {
   let firstScreen = commentUpdate$.filter(firstPage)
   let liveUpdate = commentUpdate$
@@ -50,15 +57,11 @@ const Danmaku = x((intent) => {
   return {
     update$: Observable
       .merge(firstScreen, liveUpdate, onScroll)
-      .map((comment: Comment) => ({
-        text: comment.text,
-        datetime: comment.datetime,
-        y: genY(comment.datetime)
-      }))
+      .map(posit)
       .map(update => state => ({ comments: state.comments.concat([update]) }))
   }
 })(DanmakuView)
 
 displayDanmakuBullets()
 displayInput(() => commentsRef, () => window.scrollY, reletivePos)
-displayComments(commentUpdate$, document.querySelector('#danmaku-comments'))
+displayComments(commentUpdate$.map(posit), document.querySelector('#danmaku-comments'))
