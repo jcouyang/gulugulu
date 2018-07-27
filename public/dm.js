@@ -2853,8 +2853,8 @@ module.exports = firebase.storage;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./app":42}],48:[function(require,module,exports){
 var inject = require('./../node_modules/cssify');
-var css = ".danmaku-input {\n  background-color: lightcyan;\n  border: 0;\n  line-height: 26px;\n  width: 100%;\n  box-sizing: border-box;\n  font-size: 24px;\n}\n.danmaku-color {\n  float: right;\n  position: absolute;\n  right: 5px;\n  line-height: 35px;\n  font-size: 24px;\n  bottom: 0px;\n  vertical-align: middle;\n}\n.danmaku-box {\n  background-color: lightcyan;\n  border-top: 1px dashed lightblue;\n  position: fixed;\n  bottom: 0;\n  width: 100%;\n  left: 0;\n  z-index: 9999;\n}\n.gulu {\n  white-space: nowrap;\n  display: block;\n  position: fixed;\n  left: 100%;\n  transition: left 12s linear;\n  font-size: 20px;\n  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;\n  color: white;\n  z-index: 9999;\n}\n";
-inject(css, undefined, '_1uk9cf7');
+var css = ".danmaku-input {\n  background-color: lightcyan;\n  border: 0;\n  line-height: 26px;\n  width: 100%;\n  box-sizing: border-box;\n  font-size: 24px;\n}\n.danmaku-color {\n  float: right;\n  position: absolute;\n  right: 5px;\n  line-height: 35px;\n  font-size: 24px;\n  bottom: 0px;\n  vertical-align: middle;\n}\n.danmaku-box {\n  background-color: lightcyan;\n  border-top: 1px dashed lightblue;\n  position: fixed;\n  bottom: 0;\n  width: 100%;\n  left: 0;\n  z-index: 9999;\n}\n.gulu {\n  white-space: nowrap;\n  display: block;\n  position: fixed;\n  left: 100%;\n  transition: left 12s linear;\n  font-size: 20px;\n  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;\n  color: white;\n  z-index: 9999;\n}\n\n#danmaku-comments {\n  padding: 0 1.5em 1.5em 1.5em;\n  border-width: .2em;\n  margin: 1rem;\n  border: solid #f7f7f9;\n  max-height: 30em;\n  overflow-y: scroll;\n  overflow-x: hidden;\n}\n\n#danmaku-comments .badge{\n  color: #111;\n  background-color: #f8f9fa;\n  display: inline-block;\n  padding: .25em .4em;\n  font-size: 75%;\n  font-weight: 700;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: .25rem;\n}\n\n#danmaku-comments .danmaku-comment {\n  position: relative;\n  padding: .75em 1.25em;\n  margin-bottom: 1rem;\n  border: 1px solid transparent;\n  border-radius: .25rem;\n}\n\n#danmaku-comments .danmaku-comment:nth-child(1n) {\n  color: #464a4e;\n  background-color: #e7e8ea;\n  border-color: #dddfe2;\n}\n\n#danmaku-comments .danmaku-comment:nth-child(2n) {\n  color: #004085;\n  background-color: #cce5ff;\n  border-color: #b8daff;\n}\n\n#danmaku-comments .danmaku-comment:nth-child(3n) {\n  color: #155724;\n  background-color: #d4edda;\n  border-color: #c3e6cb;\n}\n\n#danmaku-comments .danmaku-comment:nth-child(5n) {\n  color: #0c5460;\n  background-color: #d1ecf1;\n  border-color: #bee5eb;\n}\n\n#danmaku-comments .danmaku-comment:nth-child(7n) {\n  color: #856404;\n  background-color: #fff3cd;\n  border-color: #ffeeba;\n}\n\n#danmaku-comments .danmaku-topos {\n  position: absolute;\n  top: 0;\n  right: 0;\n  padding: .75em 1.25em;\n  background: 0 0;\n  border: 0;\n  float: right;\n  font-size: 1em;\n  font-weight: 700;\n  line-height: 1;\n  text-shadow: 0 1px 0 #fff;\n  opacity: .5;\n}\n";
+inject(css, undefined, '_3621j6');
 module.exports = css;
 
 },{"./../node_modules/cssify":41}],49:[function(require,module,exports){
@@ -2881,17 +2881,7 @@ var db_1 = require("./db");
 require("../public/main.css");
 var url = document.querySelector('#direct-message-to');
 var y = document.querySelector('#direct-message-y');
-var updateinput = function () { url.value = window.location.hash.slice(1); };
-updateinput();
-window.onhashchange = updateinput;
-function commentsRef() {
-    var refPath = "comments/" + btoa(url.value) + "/";
-    return {
-        db: db_1.default.ref(refPath),
-        y: y
-    };
-}
-shoot_1.renderInput(commentsRef);
+shoot_1.displayInput(function () { return db_1.default.ref("comments/" + btoa(window.location.hash.slice(1)) + "/"); }, function () { return y; });
 
 },{"../public/main.css":48,"./db":49,"./shoot":51}],51:[function(require,module,exports){
 "use strict";
@@ -2903,7 +2893,8 @@ require("@reactivex/rxjs/dist/cjs/add/observable/fromEvent");
 require("@reactivex/rxjs/dist/cjs/add/observable/fromPromise");
 require("@reactivex/rxjs/dist/cjs/add/operator/debounceTime");
 require("@reactivex/rxjs/dist/cjs/add/operator/pluck");
-function renderInput(ref) {
+function displayInput(getdb, gety, getpos) {
+    if (getpos === void 0) { getpos = function () { return 0; }; }
     var shotToDanmaku = document.createElement('input');
     shotToDanmaku.id = 'danmaku-input';
     shotToDanmaku.className = 'danmaku-input';
@@ -2923,16 +2914,18 @@ function renderInput(ref) {
         .fromEvent(shotToDanmaku, 'keyup')
         .filter(function (e) { return e.keyCode === 13; })
         .pluck('target', 'value')
-        .mergeMap(function (text) { return Observable_1.Observable.fromPromise(ref().db.push().set({
+        .filter(function (text) { return text.trim().length != 0; })
+        .mergeMap(function (text) { return Observable_1.Observable.fromPromise(getdb().push().set({
         text: text,
         datetime: new Date().getTime(),
-        y: ref().y
+        y: gety(),
+        pos: getpos(),
     })); })
         .subscribe(function (x) {
         shotToDanmaku.value = '';
         console.log('saved..', x);
     });
 }
-exports.renderInput = renderInput;
+exports.displayInput = displayInput;
 
 },{"@reactivex/rxjs/dist/cjs/Observable":2,"@reactivex/rxjs/dist/cjs/add/observable/fromEvent":8,"@reactivex/rxjs/dist/cjs/add/observable/fromPromise":9,"@reactivex/rxjs/dist/cjs/add/operator/debounceTime":10,"@reactivex/rxjs/dist/cjs/add/operator/filter":11,"@reactivex/rxjs/dist/cjs/add/operator/mergeMap":12,"@reactivex/rxjs/dist/cjs/add/operator/pluck":13}]},{},[50]);
