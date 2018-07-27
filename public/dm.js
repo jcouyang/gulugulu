@@ -2883,16 +2883,16 @@ exports.default = database;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var shoot_1 = require("./shoot");
+var utils_1 = require("./utils");
 var db_1 = require("./db");
 require("../public/main.css");
 var url = document.querySelector('#direct-message-to');
-var y = document.querySelector('#direct-message-y');
 var hash = window.location.hash.slice(1);
 if (hash)
-    y.value = hash;
-shoot_1.displayInput(function () { return db_1.default.ref("comments/" + btoa(y.value) + "/"); }, function () { return window.scrollY; }, function () { return parseInt(y.value); });
+    url.value = hash;
+shoot_1.displayInput(function () { return db_1.default.ref("comments/" + btoa(url.value) + "/"); }, function () { return window.scrollY; }, utils_1.reletivePos);
 
-},{"../public/main.css":49,"./db":50,"./shoot":52}],52:[function(require,module,exports){
+},{"../public/main.css":49,"./db":50,"./shoot":52,"./utils":53}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Observable_1 = require("@reactivex/rxjs/dist/cjs/Observable");
@@ -2943,4 +2943,30 @@ function displayInput(getdb, gety, getpos) {
 }
 exports.displayInput = displayInput;
 
-},{"@reactivex/rxjs/dist/cjs/Observable":2,"@reactivex/rxjs/dist/cjs/add/observable/fromEvent":8,"@reactivex/rxjs/dist/cjs/add/observable/fromPromise":9,"@reactivex/rxjs/dist/cjs/add/operator/debounceTime":10,"@reactivex/rxjs/dist/cjs/add/operator/filter":11,"@reactivex/rxjs/dist/cjs/add/operator/map":12,"@reactivex/rxjs/dist/cjs/add/operator/mergeMap":13,"@reactivex/rxjs/dist/cjs/add/operator/pluck":14}]},{},[51]);
+},{"@reactivex/rxjs/dist/cjs/Observable":2,"@reactivex/rxjs/dist/cjs/add/observable/fromEvent":8,"@reactivex/rxjs/dist/cjs/add/observable/fromPromise":9,"@reactivex/rxjs/dist/cjs/add/operator/debounceTime":10,"@reactivex/rxjs/dist/cjs/add/operator/filter":11,"@reactivex/rxjs/dist/cjs/add/operator/map":12,"@reactivex/rxjs/dist/cjs/add/operator/mergeMap":13,"@reactivex/rxjs/dist/cjs/add/operator/pluck":14}],53:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+function firstPage(comment) {
+    // display danmaku in first 5% of the page
+    return pos(comment) <= 5;
+}
+exports.firstPage = firstPage;
+function genY(time) {
+    return time % (window.innerHeight - 52) + 'px';
+}
+exports.genY = genY;
+function pos(comment) {
+    return comment.pos || comment.y * 100 / window.document.body.offsetHeight;
+}
+exports.pos = pos;
+function nearPos(y, comment) {
+    var currentPos = y / window.document.body.offsetHeight * 100;
+    return currentPos <= pos(comment) + 1 && currentPos >= pos(comment) - 1;
+}
+exports.nearPos = nearPos;
+function reletivePos() {
+    return window.scrollY / window.document.body.offsetHeight * 100;
+}
+exports.reletivePos = reletivePos;
+
+},{}]},{},[51]);
