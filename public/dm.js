@@ -2912,6 +2912,11 @@ function displayInput(getdb, gety, getpos) {
     document.body.appendChild(shotDanmakuBox);
     Observable_1.Observable
         .fromEvent(shotToDanmaku, 'keyup')
+        .map(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return e;
+    })
         .filter(function (e) { return e.keyCode === 13; })
         .pluck('target', 'value')
         .filter(function (text) { return text.trim().length != 0; })

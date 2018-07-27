@@ -26,6 +26,11 @@ export function displayInput(getdb, gety, getpos = () => 0) {
 
   Observable
     .fromEvent<KeyboardEvent>(shotToDanmaku, 'keyup')
+    .map(e => {
+      e.preventDefault();
+      e.stopPropagation();
+      return e
+    })
     .filter((e) => e.keyCode === 13)
     .pluck('target', 'value')
     .filter((text: string) => text.trim().length != 0)
