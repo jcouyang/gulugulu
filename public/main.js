@@ -25160,7 +25160,7 @@ var comments_1 = require("./comments");
 var danmaku_1 = require("./view/danmaku");
 require("../public/main.css");
 var h = React.createElement;
-var refPath = "comments/" + btoa(window.location.href) + "/";
+var refPath = "comments/" + btoa(window.location.href.replace(window.location.hash, '')) + "/";
 var commentsRef = db_1.default.ref(refPath);
 var whenMounted = new Date().getTime();
 var utils_1 = require("./utils");
@@ -25293,7 +25293,6 @@ var React = require("react");
 var h = React.createElement;
 var bullet_1 = require("../bullet");
 exports.DanmakuView = function (props) {
-    console.log(props);
     return h('div', { className: 'danmaku' }, props.comments.map(function (comment, key) { return h(bullet_1.Bullet, { key: key, comment: comment }); }));
 };
 exports.DanmakuView.defaultProps = {

@@ -11,7 +11,7 @@ import { displayComments } from './comments'
 import { DanmakuView } from './view/danmaku'
 import '../public/main.css'
 const h = React.createElement
-const refPath = `comments/${btoa(window.location.href)}/`;
+const refPath = `comments/${btoa(window.location.href.replace(window.location.hash, ''))}/`;
 const commentsRef = database.ref(refPath);
 const whenMounted = new Date().getTime()
 import { firstPage, genY, pos, nearPos, reletivePos } from './utils'
