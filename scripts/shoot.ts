@@ -21,7 +21,14 @@ export function displayInput(getdb, gety, getpos = () => 0) {
     shotToDanmaku.placeholder = "💬 Type here to 突っ込み(Tsukkomi) on 弾幕(Danmaku)~"
 
   const shotDanmakuBox = document.createElement('div') as HTMLElement
+
+  const enable = document.createElement('input') as HTMLInputElement
+    enable.type = 'checkbox'
+    enable.id = 'danmaku-enable'
+    enable.className = 'danmaku-enable'
+
   shotDanmakuBox.className = 'danmaku-box'
+    shotDanmakuBox.appendChild(enable)
   shotDanmakuBox.appendChild(shotToDanmaku)
   document.body.appendChild(shotDanmakuBox)
 
